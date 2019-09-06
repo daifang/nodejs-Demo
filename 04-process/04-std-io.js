@@ -2,24 +2,23 @@
 
 var me = {}, i = 1;
 
-const msg = ['Name', 'Email', 'QQ', 'Mobile'],
-      log = console.log;
+const msg = ['Name', 'Email', 'QQ', 'Mobile'];
 
-log(msg[0] + ':');
+process.stdout.write(msg[0] + ': ');
 
 const stdin = process.stdin;
 
 stdin.on('data', (data) => {
   me[msg[i-1]] = data.slice(0, data.length - 1).toString('utf8');
   if(i === 4) {
-    log(me);
+    console.log(me);
     process.exit();
   } else {
-    log(msg[i++] + ':');
+    process.stdout.write(msg[i++] + ': ');
   }
 });
 
 stdin.on('end', () => {
-  log(me);
+  console.log(me);
 });
 
