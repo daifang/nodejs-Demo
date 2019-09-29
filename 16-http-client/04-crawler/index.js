@@ -1,9 +1,10 @@
 #!/usr/bin/node
 
-const http    = require('http'),
+const http    = require('https'),
       cheerio = require('cheerio'),
       log     = console.log,
-      addr    = 'http://edu.51cto.com/courselist/index-zh5.html';
+      print   = require('util').debuglog('crawler'),
+      addr    = 'https://segmentfault.com/lives/free';
 
 http.get(addr, (res) => {
   var result = '';
@@ -13,19 +14,20 @@ http.get(addr, (res) => {
   });
 
   res.on('end', () => {
+    print(result);
+
     var $ = cheerio.load(result);
-    $('body').find('div.main').each(function(){
-      var cName = $(this).find('a').text(),
-          cTime = $(this).find('p.fl').text(),
-          cTarget = $(this).find('div.course_target').text(),
-          cURL = $(this).find('a').attr('href');
-   
-      if(cTime === '') return;
+    $('body').find('.card-body').each(function(){
+      print($(this).html());
+      var cName = $(this).find('.card-title>a').text(),
+          cURL  = $(this).find('.card-title>a').attr('href');
+
+      cURL = 'https://segmentfault.com' + cURL;
+
+      if(cName === '') return;
 
       log('课程名称：', cName);
-      log('课时数量：', cTime);
       log('课程网址：', cURL.trim());
-      log('教学目标：', cTarget.trim());
       log('');
     });
   });
