@@ -2,7 +2,8 @@
 
 const http = require('http'),
       url  = require('url'),
-      qs   = require('querystring');
+      qs   = require('querystring'),
+      log  = console.log;
 
 var items = [];
 
@@ -14,8 +15,9 @@ http.createServer((req, res) => {
     return;
   }
 
-  console.log(req.headers);
-  console.log('');
+  log(`${req.method} ${req.url} HTTP/${req.httpVersion}`);
+  log(req.headers);
+  log('');
 
   add(req, res);
 }).listen(8080);
@@ -51,6 +53,7 @@ function add(req, res) {
 
   if(typeof value !== 'undefined') items.push(value);
 
+  log(items);
   show(res);
 }
 
